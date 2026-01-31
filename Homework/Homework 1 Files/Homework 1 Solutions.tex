@@ -1,0 +1,340 @@
+\documentclass[12pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath, amssymb, amsthm}
+\usepackage{geometry}
+\usepackage{graphicx}
+\usepackage{listings}
+\usepackage{color}
+\usepackage{float}
+\usepackage{enumitem}
+
+\geometry{margin=1in}
+
+% Code snippet styling
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+
+\lstdefinestyle{mystyle}{
+    backgroundcolor=\color{backcolour},   
+    commentstyle=\color{codegray},
+    keywordstyle=\color{magenta},
+    numberstyle=\tiny\color{codegray},
+    stringstyle=\color{codepurple},
+    basicstyle=\ttfamily\footnotesize,
+    breakatwhitespace=false,         
+    breaklines=true,                 
+    captionpos=b,                    
+    keepspaces=true,                 
+    numbers=left,                    
+    numbersep=5pt,                  
+    showspaces=false,                
+    showstringspaces=false,
+    showtabs=false,                  
+    tabsize=2
+}
+\lstset{style=mystyle}
+
+\title{Homework 1 Solutions}
+\author{Aniket Ghosh \\ STAT 6530}
+
+
+\begin{document}
+
+\maketitle
+
+\section*{Problem 1}
+\textbf{Consider the function $g(y)$ defined as:}
+\[ g(y) = \begin{cases} y^2, & \text{for } 0 < y < 1, \\ 0, & \text{elsewhere.} \end{cases} \]
+
+\subsection*{(i) Is $g(y)$ a pdf?}
+To check if the function is a pdf, we integrate it over its support to check if it equals 1.
+\[ \int_{0}^{1} y^2 \, dy = \left[ \frac{y^3}{3} \right]_0^1 = \frac{1}{3} - 0 = \frac{1}{3} \]
+Since $\frac{1}{3} \neq 1$, $g(y)$ is not a pdf.
+
+\subsection*{(ii) Find the constant $c$ so that $cg(y)$ is a pdf. Denote this pdf by $f(y)$.}
+We need $\int_{0}^{1} c \cdot y^2 \, dy = 1$. Since we know that $\int_{0}^{1} y^2 \, dy = \frac{1}{3}$, we can take $c$ to be $3$.
+Thus, the pdf is:
+\[ f(y) = 3y^2, \quad 0 < y < 1 \]
+
+\subsection*{(iii) Show that the cdf is given by $F(y) = y^3$ for $0 < y < 1$.}
+The cdf is defined as $F(y) = \int_{-\infty}^{y} f(t) \, dt$.
+For $0 < y < 1$:
+\[ F(y) = \int_{0}^{y} 3t^2 \, dt = \left[ t^3 \right]_0^y = y^3 \]
+
+\subsection*{(iv) Finding the inverse function $F^{-1}(p)$ and the three percentiles.}
+$p = F(y) = y^3$. Solving for $y$:
+\[ y = p^{1/3} \]
+Thus, $F^{-1}(p) = p^{1/3}$ for $0 < p < 1$.
+
+\noindent The percentiles are calculated as follows:
+\begin{itemize}
+    \item \textbf{ $p=0.25 = (0.25)^{1/3} \approx 0.62996$}
+    \item \textbf{ $p=0.50 = (0.50)^{1/3} \approx 0.79370$}
+    \item \textbf{ $p=0.75 = (0.75)^{1/3} \approx 0.90856$}
+\end{itemize}
+
+\subsection*{(v) Simulation using Inverse CDF method in R}
+\begin{lstlisting}[language=R]
+set.seed(123)
+# Generate uniform random variables
+random_var <- runif(10000)
+# Inverse CDF transformation
+inverse_f <- random_var^(1/3)
+
+# Calculate sample quartiles
+sample_quartiles <- quantile(inverse_f, probs = c(0.25, 0.50, 0.75))
+print(sample_quartiles)
+\end{lstlisting}
+
+\noindent \textbf Using this R code, we obtain the values: 0.6323802, 0.7908156, and 0.9058849, respectively. We see that the sample quartiles from the simulation are very close to the theoretical values calculated.
+
+\subsection*{(vi) Relative Frequency Histogram}
+\begin{lstlisting}[language=R]
+hist(inverse_f, prob=TRUE, main="Histogram of Simulated Y vs PDF of f(y)", 
+     xlab="y", col="lightblue", breaks=50)
+curve(3*x^2, from=0, to=1, col="red", lwd=2, add=TRUE)
+legend("topleft", legend="Theoretical PDF 3y^2", col="red", lwd=2)
+\end{lstlisting}
+
+\begin{figure}[H]
+    \centering
+    % Make sure the filename inside {} matches exactly what you uploaded
+    \includegraphics[width=0.8\textwidth]{histogram_1.png}
+    \caption{Relative frequency histogram of simulated data overlaid with PDF of $f(y)$.}
+\end{figure}
+
+\noindent \textbf The relative frequency histogram of the simulated data closely matches the pdf curve $f(y) = 3y^2$, showing an exponential increase in density as $y$ approaches 1.
+
+\newpage
+
+\section*{Problem 2}
+\textbf{Suppose $Y$ is a continuous random variable with the pdf $f_Y(y)$ and the cdf $F_Y(y)$. For any number $c$, $R(c) = \int_{c}^{\infty} f_Y(t)dt = 1 - F_Y(c)$. Consider the random variable $R(Y) = 1 - F_Y(Y)$.}
+
+\subsection*{(a) Find the cdf of $R(Y)$.}
+Let $F_{R(Y)}(r)$ denote the cumulative distribution function of the random variable $R(Y)$. By definition:
+\[ F_{R(Y)}(r) = P(R(Y) \le r) \]
+Substituting the expression for $R(Y)$ given in the problem:
+\[ F_{R(Y)}(r) = P(1 - F_Y(Y) \le r) \]
+Rearranging the inequality:
+\[ F_{R(Y)}(r) = P(F_Y(Y) \ge 1 - r) \]
+We know that for any continuous random variable $Y$, the transformation $F_Y(Y)$ follows a standard Uniform distribution on the interval $(0, 1)$. 
+For a Uniform(0,1) variable, the probability of being greater than or equal to some value $k$ is $1 - k$ (provided $0 < k < 1$).
+Therefore, substituting $1-r$ for $k$:
+\[ F_{R(Y)}(r) = 1 - (1 - r) = r \]
+Thus, the cdf of $R(Y)$ is:
+\[ F_{R(Y)}(r) = \begin{cases} 0, & r \le 0 \\ r, & 0 < r < 1 \\ 1, & r \ge 1 \end{cases} \]
+
+\noindent This is a uniform distribution itself.
+
+\subsection*{(b) Find the pdf of $R(Y)$.}
+Let $f_{R(Y)}(r)$ denote the probability density function of $R(Y)$. The pdf is the derivative of the cdf with respect to $r$: 
+\[ f_{R(Y)}(r) = \frac{d}{dr} F_{R(Y)}(r) = \frac{d}{dr}(r) = 1 \]
+Thus, the pdf is:
+\[ f_{R(Y)}(r) = \begin{cases} 1, & 0 < r < 1 \\ 0, & \text{elsewhere} \end{cases} \]
+This also indicates that $R(Y)$ follows a Uniform(0,1) distribution.
+
+\subsection*{(c) Find the mean and the variance of $R(Y)$.}
+Using the pdf, we can calculate the expected value (mean) and variance directly.
+
+\noindent \textbf{Mean:}
+\[ E[R(Y)] = \int_{-\infty}^{\infty} r \cdot f_{R(Y)}(r) \, dr = \int_0^1 r \cdot 1 \, dr = \left[ \frac{r^2}{2} \right]_0^1 = \frac{1}{2} \]
+
+\noindent \textbf{Variance:}
+First, we calculate the second moment $E[R(Y)^2]$:
+\[ E[R(Y)^2] = \int_0^1 r^2 \cdot f_{R(Y)}(r) \, dr = \int_0^1 r^2 \, dr = \left[ \frac{r^3}{3} \right]_0^1 = \frac{1}{3} \]
+Now, using the variance formula $Var(R(Y)) = E[R(Y)^2] - (E[R(Y)])^2$:
+\[ Var(R(Y)) = \frac{1}{3} - \left(\frac{1}{2}\right)^2 = \frac{1}{3} - \frac{1}{4} = \frac{1}{12} \]
+
+\newpage
+
+\section*{Problem 3}
+\textbf{Suppose $Y$ is a standard normal random variable with cdf $\Phi(y) = P[Y \le y] = \int_{-\infty}^{y} \frac{1}{\sqrt{2\pi}} e^{-t^2/2} dt$.}
+
+\subsection*{(a) Show that for any $c$, $\Phi(c) + \Phi(-c) = 1$.}
+By definition, $\Phi(c) = P(Y \le c)$ and $\Phi(-c) = P(Y \le -c)$.
+Because the standard normal probability density function $\phi(t) = \frac{1}{\sqrt{2\pi}}e^{-t^2/2}$ is symmetric about 0 (because it has a distribution $N~(0,1$), the area under the curve to the left of $-c$ is equal to the area under the curve to the right of $c$.
+Mathematically:
+\[ P(Y \le -c) = P(Y \ge c) \]
+We also know that the total probability is 1:
+\[ P(Y \le c) + P(Y \ge c) = 1 \]
+Substituting $\Phi(-c)$ for $P(Y \ge c)$ (using the symmetry property derived above):
+\[ \Phi(c) + \Phi(-c) = 1 \]
+
+\subsection*{(b) Let $X = \Phi(-Y)$. Find the cdf of $X$ and the pdf of $X$.}
+First, we simplify the expression for $X$ using the identity derived in part (a):
+\[X = \Phi(-Y) = 1 - \Phi(Y) \]
+
+
+\noindent To find the cdf $F_X(x) = P(X \le x)$, we substitute our simplified $X$:
+\[ F_X(x) = P(1 - \Phi(Y) \le x) \]
+Rearranging the inequality:
+\[ F_X(x) = P(\Phi(Y) \ge 1 - x) \]
+It is a known property that for any continuous random variable $Y$ with cdf $\Phi$, the random variable $\Phi(Y)$ follows a standard Uniform distribution on $(0,1)$.
+For a standard uniform variable, the probability of being greater than or equal to a value $k$ is simply $1-k$. Here, $k = 1-x$.
+Therefore:
+\[ F_X(x) = 1 - (1 - x) = x \]
+Thus, the cdf is:
+\[ F_X(x) = \begin{cases} 0, & x \le 0 \\ x, & 0 < x < 1 \\ 1, & x \ge 1 \end{cases} \]
+
+\noindent To find the pdf $f_X(x)$, we take the derivative of the cdf with respect to $x$:
+\[ f_X(x) = \frac{d}{dx} F_X(x) = \frac{d}{dx}(x) = 1 \]
+Thus, the pdf is:
+\[ f_X(x) = \begin{cases} 1, & 0 < x < 1 \\ 0, & \text{elsewhere} \end{cases} \]
+
+\subsection*{(c) Find the mean and the variance of $X$.}
+We see that the distribution is a $U~(0,1)$ distribution, and we have already calculated the mean and variance in the last problem.
+
+\noindent\textbf{Mean: $\frac{1}{2}$}
+
+\noindent \textbf{Variance: $\frac{1}{12}$}
+
+\newpage
+
+\section*{Problem 4}
+\textbf{Consider two random variables $X$ and $Y$.}
+
+\subsection*{(a) Show that $Var(X+Y) = Var(X) + Var(Y) + 2Cov(X,Y)$.}
+By definition of variance:
+\[ Var(X+Y) = E[((X+Y) - E[X+Y])^2] \]
+Let $\mu_x = E[X]$ and $\mu_y = E[Y]$. Then $E[X+Y] = \mu_x + \mu_y$.
+\begin{align*}
+Var(X+Y) &= E[((X - \mu_x) + (Y - \mu_y))^2] \\
+&= E[(X - \mu_x)^2 + (Y - \mu_y)^2 + 2(X-\mu_x)(Y-\mu_y)] \\
+&= E[(X - \mu_x)^2] + E[(Y - \mu_y)^2] + 2E[(X-\mu_x)(Y-\mu_y)] \\
+&= Var(X) + Var(Y) + 2Cov(X,Y)
+\end{align*}
+
+\subsection*{(b) Show that $Var(X-Y) = Var(X) + Var(Y) - 2Cov(X,Y)$.}
+Using the result from (a) for random variables $X$ and $-Y$:
+\[ Var(X + (-Y)) = Var(X) + Var(-Y) + 2Cov(X, -Y) \]
+We know that $Var(-Y) = (-1)^2 Var(Y) = Var(Y)$ and $Cov(X, -Y) = -Cov(X,Y)$.
+Substituting these in:
+\[ Var(X-Y) = Var(X) + Var(Y) - 2Cov(X,Y) \]
+
+\subsection*{(c) Show how (a) and (b) simplify when X and Y are uncorrelated.}
+If $X$ and $Y$ are uncorrelated, then $Cov(X,Y) = 0$.
+The equations simplify to:
+\[ Var(X+Y) = Var(X) + Var(Y) \]
+\[ Var(X-Y) = Var(X) + Var(Y) \]
+
+\newpage
+
+\section*{Problem 5}
+\textbf{Suppose $Y$ has an exponential distribution with pdf $f(y;\lambda) = \lambda e^{-\lambda y}$ and cdf $F(y;\lambda) = 1 - e^{-\lambda y}$.}
+
+\subsection*{(a) Find the median of Y.}
+At the median, $F(y) = 0.5$:
+\[ 1 - e^{-\lambda y} = 0.5 \implies e^{-\lambda y} = 0.5 \]
+Take $\ln$ of both sides:
+\[ -\lambda y = \ln(0.5) = -\ln(2) \implies y = \frac{\ln(2)}{\lambda} \approx \frac{0.693}{\lambda} \]
+
+\subsection*{(b) Find the lower quartile and upper quartile.}
+\textbf{Lower Quartile ($Q_1$):} Set $F(q_1) = 0.25$.
+\[ 1 - e^{-\lambda q_1} = 0.25 \implies e^{-\lambda q_1} = 0.75 \]
+\[ q_1 = \frac{-\ln(0.75)}{\lambda} = \frac{\ln(4/3)}{\lambda} \approx \frac{0.288}{\lambda} \]
+
+\noindent \textbf{Upper Quartile ($Q_3$):} Set $F(q_3) = 0.75$.
+\[ 1 - e^{-\lambda q_3} = 0.75 \implies e^{-\lambda q_3} = 0.25 \]
+\[ q_3 = \frac{-\ln(0.25)}{\lambda} = \frac{\ln(4)}{\lambda} \approx \frac{1.386}{\lambda} \]
+
+\subsection*{(c) Comparing median and upper quartile with the mean.}
+The mean of an exponential distribution is $E[Y] = \frac{1}{\lambda}$.
+\begin{itemize}
+    \item \textbf{Median vs Mean:} $\frac{0.693}{\lambda} < \frac{1}{\lambda}$. The median is smaller than the mean.
+    \item \textbf{Upper Quartile vs Mean:} $\frac{1.386}{\lambda} > \frac{1}{\lambda}$. The upper quartile is larger than the mean.
+\end{itemize}
+
+\newpage
+
+\section*{Problem 6}
+\textbf{In an exit poll, $n=1648$, $\hat{p} = 0.515$ for Candidate A.}
+
+\subsection*{(a) Find the standard error assuming $p=0.50$.}
+The standard error of the sample proportion is $\sqrt{\frac{p(1-p)}{n}}$.
+Using $p=0.50$:
+\[ SE = \sqrt{\frac{0.50(1-0.50)}{1648}} = \sqrt{\frac{0.25}{1648}} \approx 0.0123 \]
+
+\subsection*{(b) Simulation Results}
+
+\textbf{(i) Simulation Code (R):}
+\begin{lstlisting}[language=R]
+set.seed(123)
+n_trials <- 100000
+n_voters <- 1648
+# Simulate election under assumption p = 0.5
+simulations <- rbinom(n_trials, n_voters, 0.5) / n_voters
+
+# Calculate probability of observing 0.515 or higher
+prob_extreme <- mean(simulations >= 0.515)
+print(paste("Probability of observing >= 51.5%:", prob_extreme))
+\end{lstlisting}
+
+\noindent We get the following results: $P(X \geq 51.5\%) = 0.11336$. We see that there is a 11.336$\%$ chance of this result. 
+
+\noindent \textbf{(ii) Using the Standard Error}
+We know that for a normal distribution, approximately 95\% of the data lies within 2 standard deviations (standard errors) of the mean.
+We calculate this "non-surprising" range around the assumed population mean of $0.50$:
+\[ \text{Range} = 0.50 \pm 2(SE) \]
+\[ \text{Range} = 0.50 \pm 2(0.0123) = 0.50 \pm 0.0246 \]
+\[ \text{Interval} = [0.4754, 0.5246] \]
+The observed exit poll proportion of 0.515 falls comfortably inside this interval. Therefore, obtaining a result of 51.5\% when the true population is split 50/50 is not surprising, because the result is within the range of expected variability. Hence, it would be difficult to justify predicting the results of this election based on this poll.
+
+\newpage
+
+\section*{Problem 7}
+
+\section*{Problem 7}
+
+Consider a sequence $X_1, X_2, \dots$ of independent $Ber(p)$ random variables. Let $T_n = \frac{1}{n}\sum_{i=1}^n X_i$. We define the logit function $g(x) = \log\left(\frac{x}{1-x}\right)$.
+We want to find the asymptotic distribution of:
+\[ \sqrt{n}\left[g(T_n) - g(p)\right] \]
+
+Since each $X_i \sim Ber(p)$, we have $E[X_i] = p$ and $Var(X_i) = p(1-p)$. According to the Central Limit Theorem, the standardized quantity converges to a standard normal distribution:
+\[ \sqrt{n}(T_n - p) \xrightarrow{d} N(0, p(1-p)) \]
+
+We apply the Delta Method, which states that for a sequence of random variables $T_n$ satisfying $\sqrt{n}(T_n - p) \xrightarrow{d} N(0, \sigma^2)$, the transformed variable converges as follows:
+\[ \sqrt{n}(g(T_n) - g(p)) \xrightarrow{d} N\left(0, [g'(p)]^2 \sigma^2\right) \]
+
+We must find the derivative $g'(p)$. Rewriting the function using logarithm rules simplifies the differentiation:
+\[ g(x) = \log\left(\frac{x}{1-x}\right) = \log(x) - \log(1-x) \]
+Differentiating with respect to $x$:
+\[ g'(x) = \frac{d}{dx}(\log(x)) - \frac{d}{dx}(\log(1-x)) = \frac{1}{x} - \left(\frac{1}{1-x} \cdot (-1)\right) = \frac{1}{x(1-x)}  \]
+
+Evaluated at $p$, we have $g'(p) = \frac{1}{p(1-p)}$.
+
+Finally, we compute the asymptotic variance by substituting $g'(p)$ and $\sigma^2 = p(1-p)$ into the Delta Method formula:
+\[ Var_{asymp} = [g'(p)]^2 \cdot \sigma^2 = \left[ \frac{1}{p(1-p)} \right]^2 \cdot p(1-p) \]
+\[ Var_{asymp} = \frac{p(1-p)}{p^2(1-p)^2} = \frac{1}{p(1-p)} \]
+
+Thus, the final convergence in distribution is:
+\[ \sqrt{n}\left[\log\left(\frac{T_n}{1-T_n}\right) - \log\left(\frac{p}{1-p}\right)\right] \xrightarrow{d} N\left(0, \frac{1}{p(1-p)}\right) \]
+
+\newpage
+
+\section*{Problem 8}
+\textbf{Using Chebyshev's inequality to prove the law of large numbers.}
+
+Chebyshev's inequality states that if $X$ is a random variable with finite variance $\sigma^2$ and mean $\mu$, then for any $k > 0$:
+\[ P(|X - \mu| \ge k\sigma) \le \frac{1}{k^2} \]
+
+Let $X_1, X_2, \dots, X_n$ be i.i.d. random variables with mean $\mu$ and finite variance $\sigma^2$.
+Let $\overline{X}_n = \frac{1}{n}\sum_{i=1}^n X_i$.
+The expected value and variance of the sample mean are:
+\[ E[\overline{X}_n] = \mu \]
+\[ Var(\overline{X}_n) = \frac{\sigma^2}{n}, \quad \text{so } SD(\overline{X}_n) = \frac{\sigma}{\sqrt{n}} \]
+
+We want to show that for any $\epsilon > 0$:
+\[ \lim_{n \to \infty} P(|\overline{X}_n - \mu| \ge \epsilon) = 0 \]
+
+Applying Chebyshev's inequality to the random variable $Y = \overline{X}_n$. We set the distance $\epsilon$ equal to $k$ standard deviations:
+\[ \epsilon = k \cdot SD(\overline{X}_n) = k \frac{\sigma}{\sqrt{n}} \]
+Solving for $k$:
+\[ k = \frac{\epsilon\sqrt{n}}{\sigma} \]
+Substituting this into Chebyshev's bound ($\frac{1}{k^2}$):
+\[ P(|\overline{X}_n - \mu| \ge \epsilon) \le \frac{1}{(\frac{\epsilon\sqrt{n}}{\sigma})^2} = \frac{\sigma^2}{n\epsilon^2} \]
+Taking the limit as $n \to \infty$:
+\[ \lim_{n \to \infty} P(|\overline{X}_n - \mu| \ge \epsilon) \le \lim_{n \to \infty} \frac{\sigma^2}{n\epsilon^2} = 0 \]
+Since probabilities cannot be negative, the probability converges to 0. This proves the Law of Large Numbers.
+
+\end{document}
