@@ -1,0 +1,318 @@
+\documentclass[12pt,letterpaper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{graphicx}
+\usepackage[margin=1in]{geometry}
+%\usepackage{xcolor}
+
+\usepackage{geometry}
+\geometry{verbose,tmargin=2.5cm,bmargin=2.5cm,lmargin=2.5cm,rmargin=2.5cm}
+\usepackage{listings} % to inlude R code with \begin{lstlisting}[language=R] etc.
+\usepackage[usenames,dvipsnames]{xcolor}
+\usepackage{enumitem}
+\definecolor{backgroundCol}{rgb}{.97, .97, .97}
+\definecolor{commentstyleCol}{rgb}{0.678,0.584,0.686}
+\definecolor{keywordstyleCol}{rgb}{0.737,0.353,0.396}
+\definecolor{stringstyleCol}{rgb}{0.192,0.494,0.8}
+\definecolor{NumCol}{rgb}{0.686,0.059,0.569}
+\definecolor{basicstyleCol}{rgb}{0.345, 0.345, 0.345}       
+\lstset{ 
+  language=R,                     % the language of the code
+  basicstyle=\small  \ttfamily \color{basicstyleCol}, % the size of the fonts that are used for the code
+  %numbers=left,                    % where to put the line-numbers
+%  numberstyle=\color{green},  % the style that is used for the line-numbers
+  stepnumber=1,                   % the step between two line-numbers. If it is 1, each line
+                                  % will be numbered
+  numbersep=5pt,                  % how far the line-numbers are from the code
+  backgroundcolor=\color{backgroundCol},  % choose the background color. You must add \usepackage{color}
+  showspaces=false,               % show spaces adding particular underscores
+  showstringspaces=false,         % underline spaces within strings
+  showtabs=false,                 % show tabs within strings adding particular underscores
+  %frame=single,                   % adds a frame around the code
+  %rulecolor=\color{white},        % if not set, the frame-color may be changed on line-breaks within not-black text (e.g. commens (green here))
+  tabsize=2,                      % sets default tabsize to 2 spaces
+  captionpos=b,                   % sets the caption-position to bottom
+  breaklines=true,                % sets automatic line breaking
+  breakatwhitespace=false,        % sets if automatic breaks should only happen at whitespace
+  keywordstyle=\color{keywordstyleCol},       % keyword style
+  commentstyle=\color{commentstyleCol},    % comment style
+  stringstyle=\color{stringstyleCol},       % string literal style
+  literate=%
+   *{0}{{{\color{NumCol}0}}}1
+    {1}{{{\color{NumCol}1}}}1
+    {2}{{{\color{NumCol}2}}}1
+    {3}{{{\color{NumCol}3}}}1
+    {4}{{{\color{NumCol}4}}}1
+    {5}{{{\color{NumCol}5}}}1
+    {6}{{{\color{NumCol}6}}}1
+    {7}{{{\color{NumCol}7}}}1
+    {8}{{{\color{NumCol}8}}}1
+    {9}{{{\color{NumCol}9}}}1
+} 
+
+
+\setlength{\parindent}{0pt}
+
+\begin{document}
+\large
+\begin{center} 
+\textbf{STAT 4530/6530}\\[1ex]
+\textbf{Homework 2}
+\end{center}
+
+\vspace{4mm}
+\normalsize
+\textbf{Name:} Aniket Ghosh\\
+\textbf{Course:} STAT 6530\\
+
+
+\vspace{4mm}
+
+\textbf{Problems}
+
+\noindent 
+
+\begin{enumerate}[leftmargin=*]
+
+% PROBLEM 1
+\item Consider the following study done at the National Institute of Science and Technology. Asbestos fibers on filters were counted as part of a project to develop measurement standards for asbestos concentration. Asbestos dissolved in water was spread on a filter, and 3-mm diameter punches were taken from the filter and mounted on a transmission electron microscope. An operator counted the number of fibers in each of 23 grid squares, yielding the following counts:
+\begin{center}
+31 29 19 18 31 28 \\
+34 27 34 30 16 18 \\
+26 27 27 18 24 22 \\
+28 24 21 17 24 
+\end{center}
+We decide to model the counts as arising from a $\text{Poisson}(\mu)$ distribution. The probability mass function for this distribution is:
+\begin{equation*}
+f(y ; \mu) = \frac{\mu^y e^{-\mu}}{y!} 
+\end{equation*}
+for $ y = 0, 1, 2, \dots$, and the distribution has mean and variance both equal to $\mu$, where the rate parameter $\mu$ must be a positive real number.
+\begin{itemize}
+    \item [(a)] (5 points) Find the maximum likelihood estimate of $\mu$. Show your work (don't just write the answer, even though we did this in class).
+    
+    \textbf{Solution:}
+    Let $Y_1, \dots, Y_n$ be an i.i.d. sample from a Poisson($\mu$) distribution. The likelihood function is given by:
+    \[ L(\mu) = \prod_{i=1}^{n} \frac{\mu^{y_i} e^{-\mu}}{y_i!} = \frac{\mu^{\sum y_i} e^{-n\mu}}{\prod y_i!} \]
+    The log-likelihood function is:
+    \[ l(\mu) = \ln L(\mu) = (\sum_{i=1}^{n} y_i) \ln(\mu) - n\mu - \sum_{i=1}^{n} \ln(y_i!) \]
+     We differentiate with respect to $\mu$ and set it to 0 to find the MLE:
+    \[ \frac{d}{d\mu} l(\mu) = \frac{\sum y_i}{\mu} - n = 0 \]
+    \[ \frac{\sum y_i}{\mu} = n 
+    \implies \hat{\mu} = \frac{\sum_{i=1}^{n} y_i}{n}\]
+    
+    This is equal to the population mean. Using the data provided:
+    Sum of counts ($\sum y_i$) = $31+29+\dots+24 = 573$.
+    Sample size ($n$) = 23.
+    \[ \hat{\mu} = \frac{573}{23} \approx 24.913 \]
+    
+    \item[(b)] (5 points) Find an approximate $90\%$ confidence interval for $\mu$.
+    
+    \textbf{Solution:}
+    For a large sample, the sampling distribution of the mean is approximately normal with standard error $\sigma/\sqrt{n}$. For a Poisson distribution, the variance is equal to the mean ($\sigma^2 = \mu$), so we estimate the standard error as $\sqrt{\hat{\mu}/n}$.
+    
+    The $90\%$ confidence interval corresponds to $z_{0.05} = 1.645$.
+    \[ \text{CI} = \hat{\mu} \pm 1.645 \sqrt{\frac{\hat{\mu}}{n}} \]
+    \[ \text{CI} = 24.913 \pm 1.645 \sqrt{\frac{24.913}{23}} \]
+    \[ \text{CI} = 24.913 \pm 1.645(1.0408) \]
+    \[ \text{CI} \approx [23.20, 26.63] \]
+\end{itemize}
+
+% PROBLEM 2
+\item Consider an i.i.d. sample of size $n$ from a distribution with probability mass function
+\begin{equation*}
+f(y; p) = p(1-p)^{y-1}
+\end{equation*}
+for $y = 1, 2, 3, \dots$, with $0 < p \leq 1$.
+\begin{itemize}
+    \item [(a)] (5 points) Find the maximum likelihood estimate of $p$.
+    
+    \textbf{Solution:}
+    The likelihood function is:
+    \[ L(p) = \prod_{i=1}^{n} p(1-p)^{y_i-1} = p^n (1-p)^{\sum y_i - n} \]
+    The log-likelihood is:
+    \[ l(p) = n \ln(p) + (\sum y_i - n) \ln(1-p) \]
+    Differentiating with respect to $p$ and setting the expression to 0:
+    \[ \frac{d}{dp} l(p) = \frac{n}{p} - \frac{\sum y_i - n}{1-p} = 0 \]
+    \[ \frac{n}{p} = \frac{\sum y_i - n}{1-p} \]
+    \[ n(1-p) = p(\sum y_i - n) \]
+    \[ n - np = p \sum y_i - np \]
+    \[ p \sum y_i = n \implies \hat{p} = \frac{n}{\sum y_i} = \frac{1}{\bar{y}} \]
+    
+    \item[(b)] (5 points) Find the Fisher information $\mathcal{I}(p)$.
+    
+    \textbf{Solution:}
+    The Fisher information for a single observation is given by $\mathcal{I}_1(p) = -E\left[ \frac{\partial^2}{\partial p^2} \ln f(Y;p) \right]$.
+    \[ \ln f(Y;p) = \ln(p) + (Y-1)\ln(1-p) \]
+    \[ \frac{\partial}{\partial p} \ln f = \frac{1}{p} - \frac{Y-1}{1-p} \]
+    \[ \frac{\partial^2}{\partial p^2} \ln f = -\frac{1}{p^2} - \frac{Y-1}{(1-p)^2} \]
+    Taking the negative expectation (We have $E[Y] = 1/p$, because the original function is a geometric distribution):
+    \[ \mathcal{I}_1(p) = \frac{1}{p^2} + \frac{E[Y]-1}{(1-p)^2} = \frac{1}{p^2} + \frac{1/p - 1}{(1-p)^2} \]
+    \[ = \frac{1}{p^2} + \frac{1}{p(1-p)} \]
+    \[ = \frac{1-p+p}{p^2(1-p)} = \frac{1}{p^2(1-p)} \]
+    For a sample of size $n$, the Fisher information is $\mathcal{I}_n(p) = n \mathcal{I}_1(p)$:
+    \[ \mathcal{I}_n(p) = \frac{n}{p^2(1-p)} \]
+    
+    \item [(c)] (5 points) Find the asymptotic variance (meaning, the approximate variance when the sample size $n$ is large) of the maximum likelihood estimate.
+    
+    \textbf{Solution:}
+    The asymptotic variance of the MLE is the inverse of the Fisher Information:
+    \[ Var(\hat{p}) = \frac{1}{\mathcal{I}_n(p)} = \frac{p^2(1-p)}{n} \]
+\end{itemize} 
+
+% PROBLEM 3
+\item Consider an i.i.d. sample of size $n$ from a $\text{N}(\mu, \sigma^2)$ distribution.
+\begin{itemize}
+    \item [(a)] (5 points) Show that the sample mean and sample variance make up a two-dimensional sufficient statistic for $(\mu, \sigma^2)$.
+    
+    \textbf{Solution:}
+    The joint pdf of the sample is:
+    \[ f(\textbf{y}; \mu, \sigma^2) = \prod_{i=1}^n \frac{1}{\sqrt{2\pi\sigma^2}} \exp\left(-\frac{(y_i-\mu)^2}{2\sigma^2}\right) \]
+    \[ = (2\pi\sigma^2)^{-n/2} \exp\left( -\frac{1}{2\sigma^2} \sum_{i=1}^n (y_i - \mu)^2 \right) \]
+    Using the identity $\sum (y_i - \mu)^2 = \sum (y_i - \bar{y})^2 + n(\bar{y} - \mu)^2$:
+    \[ = (2\pi\sigma^2)^{-n/2} \exp\left( -\frac{\sum (y_i - \bar{y})^2}{2\sigma^2} - \frac{n(\bar{y} - \mu)^2}{2\sigma^2} \right) \]
+    By the Factorization Theorem, we can write $f(\textbf{y}) = g(T(\textbf{y}); \theta) \cdot h(\textbf{y})$, where $h(\textbf{y})=1$. The function $g$ depends on the data only through $\bar{y}$ (sample mean) and $\sum (y_i - \bar{y})^2$ (which is $(n-1)s^2$). Thus, $(\bar{Y}, S^2)$ is sufficient for $(\mu, \sigma^2)$. Even without the Factorization theorem, we can see that the first term in the exponent is a multiple of the variance, and hence, this entire expression can be estimated with just the sample mean and variations alone.
+
+    
+    \item[(b)] (5 points) Suppose we know that $\sigma^2 = 4$ but $\mu$ unknown. Find a sufficient statistic for $\mu$.
+    
+    \textbf{Solution:}
+    Substituting $\sigma^2=4$ into the joint pdf:
+    \[ f(\textbf{y}; \mu) = 4\sqrt{2\pi}^{-n/2} \exp\left( -\frac{1}{8} \sum (y_i - \mu)^2 \right) \]
+    \[ = 4\sqrt{2\pi}^{-n/2}\exp\left( -\frac{1}{8} (\sum y_i^2 - 2\mu \sum y_i + n\mu^2) \right) \]
+    \[ = 4\sqrt{2\pi} ^{-n/2} \exp\left( -\frac{\sum y_i^2}{8} \right) \cdot \exp\left( \frac{\mu \sum y_i}{4} - \frac{n\mu^2}{8} \right) \]
+    Using the Factorization Theorem, let $h(\textbf{y}) = \exp(-\sum y_i^2 / 8)$ and $g(T(\textbf{y}); \mu) = \exp(\frac{\mu \sum y_i}{4} - \frac{n\mu^2}{8})$. The part depending on $\mu$ depends on the data only through $\sum Y_i$. Therefore, $T = \sum_{i=1}^n Y_i$ (or equivalently $\bar{Y}$) is a sufficient statistic for $\mu$. Even without the factorization theorem, we can see, that to ascertain $\mu$, we only need the sample mean and expressions utilizing it.
+    
+    \item[(c)] (5 points) Suppose we know that $\mu = -3$ but $\sigma^2$ is unknown. Find a sufficient statistic for $\sigma^2$.
+    
+    \textbf{Solution:}
+    We substitute $\mu = -3$ into the joint pdf:
+    \[ f(\textbf{y}; \sigma^2) = (2\pi\sigma^2)^{-n/2} \exp\left( -\frac{1}{2\sigma^2} \sum_{i=1}^n (y_i - (-3))^2 \right) \]
+    \[ = (2\pi\sigma^2)^{-n/2} \exp\left( -\frac{1}{2\sigma^2} \sum_{i=1}^n (y_i + 3)^2 \right) \]
+    Here, using the Factorization Theorem, the function depends on the data only through the term $\sum_{i=1}^n (y_i + 3)^2$. Thus, $T = \sum_{i=1}^n (Y_i + 3)^2$ is a sufficient statistic for $\sigma^2$.
+    
+\end{itemize}
+
+
+% PROBLEM 4
+\item (10 points) A social scientist wanted to estimate the proportion of school children in Boston who live in a single-parent family. She decided to use a sample size such that, with probability 0.95, the error would not exceed 0.05. How large a sample size should she use, if she has no idea of the size of that proportion?
+
+\textbf{Solution:}
+We want a 95\% confidence interval with a margin of error $E = 0.05$. The formula for sample size is:
+\[ n = \frac{z_{\alpha/2}^2 \cdot p(1-p)}{E^2} \]
+For a 95\% confidence level, $z_{\alpha/2} = 1.96$. Since we have no idea of the size of the proportion $p$, we use the value of $p$ which maximizes the variance $p(1-p)$ to ensure the sample size is sufficient for any $p$. This maximum occurs at $p=0.5$.
+
+\[ n = \frac{(1.96)^2 \cdot 0.5(1-0.5)}{(0.05)^2} \]
+\[ n = \frac{3.8416 \cdot 0.25}{0.0025} = 384.16 \]
+We round this up, arrive at a sample size of $n = 385$.
+
+
+% PROBLEM 5
+\item Consider collecting a sample of size $n = 1497$ from a population with the goal of estimating the proportion of the population that prefers coffee rather than tea. Suppose that the true proportion is $p = 0.53$. 
+\begin{itemize}
+    \item [(a)] (10 points) Use \texttt{R} to to simulate $s$ different samples of size $n$ from the population (using the true value of $p$ to simulate the data). For each sample, construct a $95\%$ score confidence interval for $p$. Report the percentage of the $s$ confidence intervals that contain the true value of $p$. Do this for $s = 5, 10, 100, 1000$.
+    
+    \textbf{Solution:}
+    The R code below performs the simulation using \texttt{prop.test} to generate Score Confidence intervals without continuity correction.
+
+\begin{lstlisting}[language=R]
+set.seed(123)
+run_simulation <- function(s, confidence_level) {
+  n <- 1497
+  p_true <- 0.53
+  coverage_count <- 0
+  
+  for (i in 1:s) {
+    successes <- rbinom(1, n, p_true)
+    
+    # We calculate Score Interval using prop.test 
+    test_result <- prop.test(successes, n, conf.level = conf_level, correct = FALSE)
+    ci <- test_result$conf.int
+    
+    if (p_true >= ci[1] && p_true <= ci[2]) {
+      coverage_count <- coverage_count + 1
+    }
+  }
+  return((coverage_count / s) * 100)
+}
+# For s = 5, 10, 100, 1000 with 95% confidence
+s_values <- c(5, 10, 100, 1000)
+cat("Coverage for 95% Score Intervals:\n")
+for (s in s_values) {
+  coverage <- run_simulation(s, 0.95)
+  cat(sprintf("s = %d: %.1f%%\n", s, coverage))
+}
+\end{lstlisting}
+
+    \textbf{Coverage for 95 $\%$ Score Intervals:}
+    \begin{itemize}
+        \item s = 5: 80.0\%
+        \item s = 10: 80.0\%
+        \item s = 100: 96.0\%
+        \item s = 1000: 95.4\%
+    \end{itemize}
+    
+    \item[(b)] (10 points) Repeat part [(a)], but this time construct $70\%$ score confidence intervals.
+    
+    \textbf{Solution:}
+\begin{lstlisting}[language=R]
+#With 70% confidence
+cat("\nCoverage for 70% Score Intervals:\n")
+for (s in s_values) {
+  coverage <- run_simulation(s, 0.70)
+  cat(sprintf("s = %d: %.1f%%\n", s, coverage))
+}
+\end{lstlisting}
+
+    \textbf{Coverage for 70 $\%$ Score Intervals:}
+    \begin{itemize}
+        \item s = 5: 80.0\%
+        \item s = 10: 90.0\%
+        \item s = 100: 70.0\%
+        \item s = 1000: 71.2\%
+    \end{itemize}
+
+\end{itemize} 
+
+% PROBLEM 6
+\item Consider a sample $\textbf Y = (Y_1, \dots, Y_n)$ that we wish to use to estimate the parameter $\theta$. Suppose that $\theta_1(\textbf Y)$ is an estimator of $\theta$ with $E[(\theta_1(\textbf Y))^2] < \infty$ for all $\theta$, suppose that $T(\textbf Y)$ is a sufficient statistic for $\theta$, and let $\theta_2(\textbf Y) = E[\theta_1 (\textbf Y) | T(\textbf Y)]$. Then, for all $\theta$,
+\begin{equation*} 
+E[(\theta_2(\textbf Y) - \theta)^2] \leq E[(\theta_1(\textbf Y) - \theta)^2],
+\end{equation*}
+and the inequality is strict unless $\theta_1(\textbf Y) = \theta_2(\textbf Y)$.
+\begin{itemize}
+    \item [(a)] (5 points) Note that $\theta_1(\textbf Y)$ and $\theta_2(\textbf Y)$ are both estimators of $\theta$. Interpret the statement above in the context of comparing the two estimators and what it implies about using sufficient statistics to construct estimators.
+    
+    \textbf{Solution:}
+    It implies that by conditioning an estimator $\theta_1$ on a sufficient statistic $T$, we obtain a new estimator $\theta_2$ that has the same expectation, but has a variance that is less than or equal to the original. Hence, we can conclude that optimal estimators should be functions of sufficient statistics.
+
+    \item[(b)] \textbf{This question is only required for students enrolled in STAT 6530.} (10 points) Provide a proof of the statement above. Hints: First, show that the two estimators have the same means, so it suffices to compare their variances. To compare the variances of the estimators, recall the following result: if $X$ and $Z$ are random variables and $X$ has finite variance, then $Var(X) = E[Var(X|Z)] + Var(E[X|Z])$.
+    
+    \textbf{Proof:}
+    The Mean Squared Error of an estimator $\hat{\theta}$ is given by:
+    \[ MSE(\hat{\theta}) = Var(\hat{\theta}) + [Bias(\hat{\theta})]^2 \]
+    
+    First, we try and verify the bias. By the Law of Iterated Expectations:
+    \[ E[\theta_2(\textbf{Y})] = E[E[\theta_1(\textbf{Y}) | T(\textbf{Y})]] = E[\theta_1(\textbf{Y})] \]
+    Since their expected values are equal, their biases are also equal: $Bias(\theta_2) = Bias(\theta_1)$. Therefore, we can say that comparing their MSEs is equivalent to comparing their variances.
+    
+    Using the conditional variance identity provided in the hint with $X = \theta_1(\textbf{Y})$ and $Z = T(\textbf{Y})$:
+    \[ Var(\theta_1) = E[Var(\theta_1 | T)] + Var(E[\theta_1 | T]) \]
+    Substituting $\theta_2 = E[\theta_1 | T]$, we get:
+    \[ Var(\theta_1) = E[Var(\theta_1 | T)] + Var(\theta_2) \]
+    
+    Since we know that variance is always non-negative, $Var(\theta_1 | T) \ge 0$, and thus its expectation $E[Var(\theta_1 | T)] \ge 0$.
+    hence, we can say:
+    \[ Var(\theta_1) \ge Var(\theta_2) \]
+    
+    Given the equality of biases, we can conclude:
+    \[ MSE(\theta_2) \le MSE(\theta_1) \]
+    
+    This inequality is strict unless $E[Var(\theta_1 | T)] = 0$. Since variance is non-negative, this expectation value is zero only if $Var(\theta_1 | T) = 0$ with probability 1. If the conditional variance is zero, $\theta_1$ must be a constant given $T$, meaning $\theta_1$ is a function of $T$. Since $\theta_2 = E[\theta_1|T]$, and $\theta_1$ is a function of $T$, then $\theta_1 = \theta_2$. In this case, the inequality no longer is strict. 
+    
+\end{itemize} 
+
+
+\end{enumerate} 
+\end{document}
