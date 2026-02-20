@@ -1,0 +1,134 @@
+\documentclass[12pt,letterpaper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{graphicx}
+\usepackage[margin=1in]{geometry}
+%\usepackage{xcolor}
+
+\usepackage{geometry}
+\geometry{verbose,tmargin=2.5cm,bmargin=2.5cm,lmargin=2.5cm,rmargin=2.5cm}
+\usepackage{listings} % to inlude R code with \begin{lstlisting}[language=R] etc.
+\usepackage[usenames,dvipsnames]{xcolor}
+\usepackage{enumitem}
+\usepackage{siunitx}
+\definecolor{backgroundCol}{rgb}{.97, .97, .97}
+\definecolor{commentstyleCol}{rgb}{0.678,0.584,0.686}
+\definecolor{keywordstyleCol}{rgb}{0.737,0.353,0.396}
+\definecolor{stringstyleCol}{rgb}{0.192,0.494,0.8}
+\definecolor{NumCol}{rgb}{0.686,0.059,0.569}
+\definecolor{basicstyleCol}{rgb}{0.345, 0.345, 0.345}       
+\lstset{ 
+  language=R,                     % the language of the code
+  basicstyle=\small  \ttfamily \color{basicstyleCol}, % the size of the fonts that are used for the code
+  %numbers=left,                   % where to put the line-numbers
+%  numberstyle=\color{green},  % the style that is used for the line-numbers
+  stepnumber=1,                   % the step between two line-numbers. If it is 1, each line
+                                  % will be numbered
+  numbersep=5pt,                  % how far the line-numbers are from the code
+  backgroundcolor=\color{backgroundCol},  % choose the background color. You must add \usepackage{color}
+  showspaces=false,               % show spaces adding particular underscores
+  showstringspaces=false,         % underline spaces within strings
+  showtabs=false,                 % show tabs within strings adding particular underscores
+  %frame=single,                   % adds a frame around the code
+  %rulecolor=\color{white},        % if not set, the frame-color may be changed on line-breaks within not-black text (e.g. commens (green here))
+  tabsize=2,                      % sets default tabsize to 2 spaces
+  captionpos=b,                   % sets the caption-position to bottom
+  breaklines=true,                % sets automatic line breaking
+  breakatwhitespace=false,        % sets if automatic breaks should only happen at whitespace
+  keywordstyle=\color{keywordstyleCol},      % keyword style
+  commentstyle=\color{commentstyleCol},   % comment style
+  stringstyle=\color{stringstyleCol},      % string literal style
+  literate=%
+   *{0}{{{\color{NumCol}0}}}1
+    {1}{{{\color{NumCol}1}}}1
+    {2}{{{\color{NumCol}2}}}1
+    {3}{{{\color{NumCol}3}}}1
+    {4}{{{\color{NumCol}4}}}1
+    {5}{{{\color{NumCol}5}}}1
+    {6}{{{\color{NumCol}6}}}1
+    {7}{{{\color{NumCol}7}}}1
+    {8}{{{\color{NumCol}8}}}1
+    {9}{{{\color{NumCol}9}}}1
+} 
+
+
+
+
+
+
+\setlength{\parindent}{0pt}
+
+\begin{document}
+\large
+\begin{center} 
+\textbf{STAT 4530/6530}\\[1ex]
+\textbf{Homework 3}
+\end{center}
+
+\vspace{4mm}
+\normalsize
+\textbf{Due:} \textcolor{red}{Friday, February 27} via eLC by 11:59 pm
+
+
+\vspace{4mm}
+\textbf{Formatting instructions:} Please label everything clearly and make sure that it is organized. I recommend typing your solutions, but neatly handwritten solutions are acceptable. For problems that require statistical computing, please attach relevant R code and plots. \textbf{Please write down (directly below your name) whether you are enrolled in STAT 4530 or STAT 6530}. 
+
+\vspace{4mm}
+
+\textbf{Grading:} Homework accounts for 40$\%$ of your final grade, and all homework assignments contribute equally to your final homework score. Your score for each homework assignment will be recorded as a percentage of the total points that you received out of the total possible points. The amount of points possible for each problem are indicated in parentheses.
+
+\vspace{4mm}
+
+\textbf{Problems}
+
+\noindent 
+
+\begin{enumerate}[leftmargin=*]
+
+
+\item (10 points) In a random sample of 25 people to estimate the extent of vegetarianism in a society, 0 people were vegetarian. Construct a 99\% Wald confidence interval for the population proportion of vegetarians. Explain the awkward issue in doing this, and find and interpret a more reliable confidence interval. 
+
+\item Two methods, A and B, were used in a determination of the latent heat of fusion of ice. The investigators wanted to find out by how much the methods differed. The following data corresponds to the change in total heat from ice at \SI{-0.72}{\celsius} to water at \SI{0}{\celsius} in calories per gram of mass:
+\begin{eqnarray*}
+& \text{Method A:} & 79.98, 80.04, 80.02, 80.04, 80.03, 80.03, 80.04, 79.97, 80.05, 80.03, 80.02, 80.00, 80.02 \\
+& \text{Method B:} & 80.02, 79.94, 79.98, 79.97, 79.97, 80.03, 79.95, 79.97
+\end{eqnarray*}
+\begin{itemize}
+	\item[(a)] (5 points) Assume the data from Method A are independent and arise from a $\text{N}(\mu_A, \sigma^2)$ distribution, and assume the data from Method B are independent and arise from a $\text{N}(\mu_B, \sigma^2)$. Also assume the data from the different methods are independent of each other. Compute a $95\%$ confidence interval for $\mu_A - \mu_B$.
+	\item[(b)] (5 points) Test $H_0: \mu_A = \mu_B$ against $H_A: \mu_A \neq \mu_B$, Make sure to indicate the test statistic you use and how you arrived at your conclusion.
+\end{itemize} 
+
+\item If gene frequencies are in equilibrium, the genotypes $AA$, $Aa$, and $aa$ occur in a population with respective frequencies $(1-\theta)^2$, $2\theta(1-\theta)$, $\theta^2$, according to the Hardy-Weinberg law. Suppose we observe the following frequencies in a sample:
+\begin{center}
+\begin{tabular}{|c|c|c|c|c|}
+\hline
+& \multicolumn{4}{|c|}{Genotype} \\
+\hline
+ & $AA$ & $Aa$ & $aa$ & Total \\
+\hline
+Frequency & 342 & 500 & 187 & 1029 \\
+\hline
+\end{tabular}
+\end{center}
+\begin{itemize}
+	\item[(a)] (5 points) Find the maximum likelihood estimate of $\theta$. 
+	\item[(b)] (5 points) Find an approximate $95\%$ confidence interval for $\theta$.
+\end{itemize} 
+
+\item (5 points) A random sample of 50 records yields a 95$\%$ confidence interval for the mean age at first marriage of women in a certain county of 23.5 to 25.0 years. Explain what is wrong with each of the following interpretations.
+
+\begin{itemize}
+	\item[(a)] If random samples of 50 records were repeatedly selected, then 95$\%$ of the time the sample mean age at first marriage for women would be between 23.5 and 25.0 years.
+	\item[(b)] Ninety-five percent of the ages at first marriage for women in the county are between 23.5 and 25.0 years.
+	\item[(c)] We can be 95$\%$ confident that $\overline{y}$ is between 23.5 and 25.0 years.
+	\item[(d)] If we repeatedly sampled the entire population, then 95$\%$ of the time the population mean
+would be between 23.5 and 25.0 years.
+\end{itemize} 
+
+\item \textbf{This question is only required for students enrolled in STAT 6530.} (10 points) Consider a biased estimator $T(\textbf Y)$ of the scalar parameter $\theta$ such that $E[T(\textbf Y)] = g(\theta)$ for some differentiable function $g(\cdot)$. Assume all of the regularity conditions mentioned in \texttt{lectureslides4.pdf} hold. Find a lower bound for the variance of $T(\textbf Y)$.
+
+
+\end{enumerate} 
+\end{document}
