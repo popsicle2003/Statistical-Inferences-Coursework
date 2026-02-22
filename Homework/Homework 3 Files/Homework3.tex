@@ -5,14 +5,14 @@
 \usepackage{amssymb}
 \usepackage{graphicx}
 \usepackage[margin=1in]{geometry}
-%\usepackage{xcolor}
 
 \usepackage{geometry}
 \geometry{verbose,tmargin=2.5cm,bmargin=2.5cm,lmargin=2.5cm,rmargin=2.5cm}
-\usepackage{listings} % to inlude R code with \begin{lstlisting}[language=R] etc.
+\usepackage{listings} 
 \usepackage[usenames,dvipsnames]{xcolor}
 \usepackage{enumitem}
 \usepackage{siunitx}
+
 \definecolor{backgroundCol}{rgb}{.97, .97, .97}
 \definecolor{commentstyleCol}{rgb}{0.678,0.584,0.686}
 \definecolor{keywordstyleCol}{rgb}{0.737,0.353,0.396}
@@ -20,26 +20,21 @@
 \definecolor{NumCol}{rgb}{0.686,0.059,0.569}
 \definecolor{basicstyleCol}{rgb}{0.345, 0.345, 0.345}       
 \lstset{ 
-  language=R,                     % the language of the code
-  basicstyle=\small  \ttfamily \color{basicstyleCol}, % the size of the fonts that are used for the code
-  %numbers=left,                   % where to put the line-numbers
-%  numberstyle=\color{green},  % the style that is used for the line-numbers
-  stepnumber=1,                   % the step between two line-numbers. If it is 1, each line
-                                  % will be numbered
-  numbersep=5pt,                  % how far the line-numbers are from the code
-  backgroundcolor=\color{backgroundCol},  % choose the background color. You must add \usepackage{color}
-  showspaces=false,               % show spaces adding particular underscores
-  showstringspaces=false,         % underline spaces within strings
-  showtabs=false,                 % show tabs within strings adding particular underscores
-  %frame=single,                   % adds a frame around the code
-  %rulecolor=\color{white},        % if not set, the frame-color may be changed on line-breaks within not-black text (e.g. commens (green here))
-  tabsize=2,                      % sets default tabsize to 2 spaces
-  captionpos=b,                   % sets the caption-position to bottom
-  breaklines=true,                % sets automatic line breaking
-  breakatwhitespace=false,        % sets if automatic breaks should only happen at whitespace
-  keywordstyle=\color{keywordstyleCol},      % keyword style
-  commentstyle=\color{commentstyleCol},   % comment style
-  stringstyle=\color{stringstyleCol},      % string literal style
+  language=R,                     
+  basicstyle=\small  \ttfamily \color{basicstyleCol}, 
+  stepnumber=1,                   
+  numbersep=5pt,                  
+  backgroundcolor=\color{backgroundCol},  
+  showspaces=false,               
+  showstringspaces=false,         
+  showtabs=false,                 
+  tabsize=2,                      
+  captionpos=b,                   
+  breaklines=true,                
+  breakatwhitespace=false,        
+  keywordstyle=\color{keywordstyleCol},      
+  commentstyle=\color{commentstyleCol},   
+  stringstyle=\color{stringstyleCol},      
   literate=%
    *{0}{{{\color{NumCol}0}}}1
     {1}{{{\color{NumCol}1}}}1
@@ -53,11 +48,6 @@
     {9}{{{\color{NumCol}9}}}1
 } 
 
-
-
-
-
-
 \setlength{\parindent}{0pt}
 
 \begin{document}
@@ -69,15 +59,12 @@
 
 \vspace{4mm}
 \normalsize
+\textbf{Name:} Aniket Ghosh\\
+\textbf{Course:} STAT 6530\\
 \textbf{Due:} \textcolor{red}{Friday, February 27} via eLC by 11:59 pm
 
-
 \vspace{4mm}
-\textbf{Formatting instructions:} Please label everything clearly and make sure that it is organized. I recommend typing your solutions, but neatly handwritten solutions are acceptable. For problems that require statistical computing, please attach relevant R code and plots. \textbf{Please write down (directly below your name) whether you are enrolled in STAT 4530 or STAT 6530}. 
-
-\vspace{4mm}
-
-\textbf{Grading:} Homework accounts for 40$\%$ of your final grade, and all homework assignments contribute equally to your final homework score. Your score for each homework assignment will be recorded as a percentage of the total points that you received out of the total possible points. The amount of points possible for each problem are indicated in parentheses.
+\textbf{Formatting instructions:} Please label everything clearly and make sure that it is organized. I recommend typing your solutions, but neatly handwritten solutions are acceptable. For problems that require statistical computing, please attach relevant R code and plots. \textbf{Please write down (directly below your name) whether you are enrolled in STAT 4530 or STAT 6530}.
 
 \vspace{4mm}
 
@@ -87,8 +74,32 @@
 
 \begin{enumerate}[leftmargin=*]
 
+\item (10 points) In a random sample of 25 people to estimate the extent of vegetarianism in a society, 0 people were vegetarian. Construct a 99\% Wald confidence interval for the population proportion of vegetarians. Explain the awkward issue in doing this, and find and interpret a more reliable confidence interval.
 
-\item (10 points) In a random sample of 25 people to estimate the extent of vegetarianism in a society, 0 people were vegetarian. Construct a 99\% Wald confidence interval for the population proportion of vegetarians. Explain the awkward issue in doing this, and find and interpret a more reliable confidence interval. 
+\textbf{Solution:}
+
+We start with the sample proportion $\hat{p}$:
+\[ \hat{p} = \frac{0}{25} = 0 \]
+The Wald confidence interval is calculated using the formula $\hat{p} \pm z_{\alpha/2}\sqrt{\frac{\hat{p}(1-\hat{p})}{n}}$.
+We use the standard normal quantile for a 99\% confidence level, $z_{0.005} = 2.58$.
+Substituting our values into the formula:
+\[ 0 \pm 2.58 \sqrt{\frac{0(1-0)}{25}} = 0 \pm 0 \]
+The 99\% Wald confidence interval is $[0, 0]$.
+
+The Wald interval gives a margin of error of exactly 0. This implies a very unrealistic 99\% confidence that the population contains absolutely zero vegetarians. The Wald confidence interval method also performs poorly when the sample size is small or when the true proportion $p$ is close to 0 or 1.
+
+In order to use a more reliable confidence interval, we use the score confidence interval for a proportion, which is more robust in situations where $n$ is small or $\hat{p}$ is near 0 or 1. The formula for the score confidence interval is:
+\[ \frac{\hat{p} + \frac{z_{\alpha/2}^2}{2n} \pm z_{\alpha/2}\sqrt{\frac{\hat{p}(1-\hat{p}) + z_{\alpha/2}^2/4n}{n}}}{1 + \frac{z_{\alpha/2}^2}{n}} \]
+Since $\hat{p} = 0$, we get:
+\[ \frac{\frac{z^2}{2n} \pm z\sqrt{\frac{z^2}{4n^2}}}{1 + \frac{z^2}{n}} = \frac{\frac{z^2}{2n} \pm \frac{z^2}{2n}}{1 + \frac{z^2}{n}} \]
+The lower bound evaluates to $0$. 
+The upper bound is $\frac{z^2/n}{1 + z^2/n} = \frac{z^2}{n + z^2}$.
+Using $n = 25$ and $z = 2.58$:
+\[ \text{Upper bound} = \frac{(2.58)^2}{25 + (2.58)^2} = \frac{6.6564}{31.6564} \approx 0.2103 \]
+
+The 99\% score confidence interval is approximately \textbf{[0, 0.210]}.
+
+If we repeatedly observe new samples and construct a 99\% score confidence interval over each of them, eventually, 99\% of such intervals will contain the true population proportion of vegetarians.
 
 \item Two methods, A and B, were used in a determination of the latent heat of fusion of ice. The investigators wanted to find out by how much the methods differed. The following data corresponds to the change in total heat from ice at \SI{-0.72}{\celsius} to water at \SI{0}{\celsius} in calories per gram of mass:
 \begin{eqnarray*}
@@ -97,8 +108,58 @@
 \end{eqnarray*}
 \begin{itemize}
 	\item[(a)] (5 points) Assume the data from Method A are independent and arise from a $\text{N}(\mu_A, \sigma^2)$ distribution, and assume the data from Method B are independent and arise from a $\text{N}(\mu_B, \sigma^2)$. Also assume the data from the different methods are independent of each other. Compute a $95\%$ confidence interval for $\mu_A - \mu_B$.
-	\item[(b)] (5 points) Test $H_0: \mu_A = \mu_B$ against $H_A: \mu_A \neq \mu_B$, Make sure to indicate the test statistic you use and how you arrived at your conclusion.
+ 
+ \textbf{Solution:}
+ First, we need to calculate the sample sizes, sample means, and sample variances.\\
+ For Method A ($n_A = 13$). $\bar{y}_A \approx 80.0208$, $s_A^2 \approx 0.000574$.\\
+ For Method B ($n_B = 8$): $\bar{y}_B \approx 79.9788$, $s_B^2 \approx 0.000984$.
+ 
+ Given that we are assuming a common variance $\sigma^2$, we compute the pooled sample standard deviation $s$:
+ \[ s = \sqrt{\frac{(n_A-1)s_A^2 + (n_B-1)s_B^2}{n_A + n_B - 2}} \]
+ \[ s = \sqrt{\frac{12(0.000574) + 7(0.000984)}{13 + 8 - 2}} = \sqrt{\frac{0.006888 + 0.006888}{19}} \approx 0.02693 \]
+ 
+ The estimated standard error for the difference in means is:
+ \[ se = s \sqrt{\frac{1}{n_A} + \frac{1}{n_B}} = 0.02693 \sqrt{\frac{1}{13} + \frac{1}{8}} \approx 0.01210 \]
+ 
+ For a 95\% confidence interval, we need to use the t-distribution with $df = n_A + n_B - 2 = 19$. The corresponding quantile is $t_{0.025, 19} \approx 2.093$.
+ \[ (\bar{y}_A - \bar{y}_B) \pm t_{0.025, 19} \times se \]
+ \[ (80.0208 - 79.9788) \pm 2.093(0.01210) \]
+ \[ 0.0420 \pm 0.0253 \]
+ 
+ $\therefore$ The 95\% confidence interval for $\mu_A - \mu_B$ is \textbf{[0.0167, 0.0673]}.
+
+	\item[(b)] (5 points) Test $H_0: \mu_A = \mu_B$ against $H_a: \mu_A \neq \mu_B$. Make sure to indicate the test statistic you use and how you arrived at your conclusion.
+ 
+ \textbf{Solution:}
+ We need to test the null hypothesis $H_0: \mu_A - \mu_B = 0$ against the alternative hypothesis $H_a: \mu_A - \mu_B \neq 0$.
+ The test statistic used the two-sample T statistic using the pooled standard deviation estimate:
+ \[ T = \frac{(\bar{y}_A - \bar{y}_B) - 0}{se} = \frac{0.0420}{0.0121} \approx 3.47 \]
+ 
+ Under $H_0$, we know that $T$ follows a t-distribution with $df = 19$. The P-value is the two-tail probability that $T$ is at least as large in absolute value as the observed value $t = 3.47$. 
+ Since our calculated observed statistic $3.47$ is much larger than the critical value $t_{0.025, 19} = 2.093$, we can ascertain that the P-value is less than 0.05. 
+ 
+ \\\ Because the P-value is smaller than 0.05, we reject the null hypothesis $H_0$. We can test this using the following R code as well.
+ 
+\begin{lstlisting}[language=R]
+method_A <- c(79.98, 80.04, 80.02, 80.04, 80.03, 80.03, 80.04, 
+              79.97, 80.05, 80.03, 80.02, 80.00, 80.02)
+method_B <- c(80.02, 79.94, 79.98, 79.97, 79.97, 80.03, 79.95, 79.97)
+
+t.test(method_A, method_B, var.equal=TRUE)
+\end{lstlisting}
 \end{itemize} 
+
+Two Sample t-test
+\\data: $method_A$ and $method_B$
+\\ t = 3.4722, $df$ = 19, p-value = 0.002551
+\\ alternative hypothesis: true difference in means is not equal to 0
+\\ 95 percent confidence interval:
+\\ 0.01669058 0.06734788
+\\ sample estimates:
+\\mean of x mean of y 
+\\ 80.02077  79.97875 
+
+This output affirms our calculations.
 
 \item If gene frequencies are in equilibrium, the genotypes $AA$, $Aa$, and $aa$ occur in a population with respective frequencies $(1-\theta)^2$, $2\theta(1-\theta)$, $\theta^2$, according to the Hardy-Weinberg law. Suppose we observe the following frequencies in a sample:
 \begin{center}
@@ -113,22 +174,95 @@ Frequency & 342 & 500 & 187 & 1029 \\
 \end{tabular}
 \end{center}
 \begin{itemize}
-	\item[(a)] (5 points) Find the maximum likelihood estimate of $\theta$. 
+	\item[(a)] (5 points) Find the maximum likelihood estimate of $\theta$.
+ 
+ \textbf{Solution:}
+ Let $y_1, y_2,$ and $y_3$ represent the observed frequencies for genotypes $AA$, $Aa$, and $aa$. Let $n = y_1 + y_2 + y_3$ represent the total sample size. 
+ The likelihood function $L(\theta)$ is proportional to the joint probability mass function of the observed counts.
+ \[ L(\theta) \propto \left( (1-\theta)^2 \right)^{y_1} \left( 2\theta(1-\theta) \right)^{y_2} \left( \theta^2 \right)^{y_3} \]
+ \[= L(\theta) \propto \theta^{y_2 + 2y_3} (1-\theta)^{2y_1 + y_2} \]
+ We maximize this function, by taking the natural logarithm to obtain the log-likelihood $l(\theta)$:
+ \[ l(\theta) = (y_2 + 2y_3) \ln(\theta) + (2y_1 + y_2) \ln(1-\theta) \]
+ Differentiating with respect to $\theta$ and setting the derivative to 0:
+ \[ l'(\theta) = \frac{y_2 + 2y_3}{\theta} - \frac{2y_1 + y_2}{1-\theta} = 0 \]
+ \[\implies (y_2 + 2y_3)(1-\theta) = (2y_1 + y_2)\theta \]
+ \[\implies y_2 + 2y_3 - \theta(y_2 + 2y_3) = \theta(2y_1 + y_2) \]
+ \[\implies y_2 + 2y_3 = \theta(2y_1 + 2y_2 + 2y_3) \]
+ Since $2y_1 + 2y_2 + 2y_3 = 2n$, we solve for $\hat{\theta}$:
+ \[ \hat{\theta} = \frac{y_2 + 2y_3}{2n} \]
+ We can now substitute the values provided:
+ \[ \hat{\theta} = \frac{500 + 2(187)}{2(1029)} = \frac{874}{2058} \approx 0.4247 \]
+
 	\item[(b)] (5 points) Find an approximate $95\%$ confidence interval for $\theta$.
+ 
+ \textbf{Solution:}
+ Maximum likelihood estimators have asymptotically normal sampling distributions. We need to construct the confidence interval using the standard error derived from the Fisher Information $I(\theta) = -E[l''(\theta)]$.
+ The second derivative of the log-likelihood:
+ \[ l''(\theta) = -\frac{y_2 + 2y_3}{\theta^2} - \frac{2y_1 + y_2}{(1-\theta)^2} \]
+ $E[y_1] = n(1-\theta)^2$, $E[y_2] = n(2\theta(1-\theta))$, and $E[y_3] = n\theta^2$. 
+ Substituting these:
+ \[ E[y_2 + 2y_3] = n(2\theta(1-\theta)) + 2n\theta^2 = 2n\theta - 2n\theta^2 + 2n\theta^2 = 2n\theta \]
+ \[ E[2y_1 + y_2] = 2n(1-\theta)^2 + n(2\theta(1-\theta)) = 2n(1-\theta)(1-\theta+\theta) = 2n(1-\theta) \]
+ Fisher Information:
+ \[ I(\theta) = -E[l''(\theta)] = \frac{2n\theta}{\theta^2} + \frac{2n(1-\theta)}{(1-\theta)^2} = \frac{2n}{\theta} + \frac{2n}{1-\theta} = \frac{2n}{\theta(1-\theta)} \]
+ 
+ The asymptotic variance of $\hat{\theta}$ is $1/I(\theta)$, $\therefore$ the standard error is:
+ \[ SE = \sqrt{\frac{\hat{\theta}(1-\hat{\theta})}{2n}} = \sqrt{\frac{0.4247(1 - 0.4247)}{2058}} = \sqrt{\frac{0.2443}{2058}} \approx 0.0109 \]
+ 
+ The 95\% confidence interval = $\hat{\theta} \pm z_{0.025} \times SE$:
+ \[= 0.4247 \pm 1.96(0.0109) \]
+ \[= 0.4247 \pm 0.0214 \]
+ 
+ $\therefore$ The approximate 95\% confidence interval for $\theta$ is \textbf{[0.4033, 0.4461]}.
 \end{itemize} 
 
 \item (5 points) A random sample of 50 records yields a 95$\%$ confidence interval for the mean age at first marriage of women in a certain county of 23.5 to 25.0 years. Explain what is wrong with each of the following interpretations.
 
 \begin{itemize}
 	\item[(a)] If random samples of 50 records were repeatedly selected, then 95$\%$ of the time the sample mean age at first marriage for women would be between 23.5 and 25.0 years.
+ 
+ \textbf{Answer:} The interval was calculated from a single sample. If samples were repeatedly selected, the resulting sample means and confidence intervals would probably fluctuate. The confidence level only denotes the probability that the interval captures the true population mean.
+ 
 	\item[(b)] Ninety-five percent of the ages at first marriage for women in the county are between 23.5 and 25.0 years.
+ 
+ \textbf{Answer:} The confidence interval strictly estimates the mean age population parameter and does not deal with general distribution description. Hence, we cannot conclude this.
+ 
 	\item[(c)] We can be 95$\%$ confident that $\overline{y}$ is between 23.5 and 25.0 years.
-	\item[(d)] If we repeatedly sampled the entire population, then 95$\%$ of the time the population mean
-would be between 23.5 and 25.0 years.
+ 
+ \textbf{Answer:} The sample mean $\overline{y}$ was used to center this interval. Hence, we know for a fact that it is within the interval. The point of the interval is to find with a certain level of confidence, that the actual population mean, i.e. $\mu$, is in the interval.
+ 
+	\item[(d)] If we repeatedly sampled the entire population, then 95$\%$ of the time the population mean would be between 23.5 and 25.0 years.
+ 
+ \textbf{Answer:} The population mean is considered to be a fixed parameter, which does not fluctuate. For the interval $[23.5, 25.0]$, the population mean either is strictly inside it or strictly outside it. The 95\% probability tells us about the long-run success rate of the random interval method before data observation, not the parameter itself.
 \end{itemize} 
 
 \item \textbf{This question is only required for students enrolled in STAT 6530.} (10 points) Consider a biased estimator $T(\textbf Y)$ of the scalar parameter $\theta$ such that $E[T(\textbf Y)] = g(\theta)$ for some differentiable function $g(\cdot)$. Assume all of the regularity conditions mentioned in \texttt{lectureslides4.pdf} hold. Find a lower bound for the variance of $T(\textbf Y)$.
 
+\textbf{Solution:}
+We start with the expected value:
+\[ E[T(\textbf{Y})] = \int T(\textbf{y}) f(\textbf{y}; \theta) d\textbf{y} = g(\theta) \]
+
+Differentiating both sides with respect to $\theta$:
+\[ \int T(\textbf{y}) \left[ \frac{\partial}{\partial \theta} f(\textbf{y}; \theta) \right] d\textbf{y} = g'(\theta) \]
+
+We multiply and divide the integrand by $f(\textbf{y}; \theta)$:
+\[ \int T(\textbf{y}) \left[ \frac{1}{f(\textbf{y}; \theta)} \frac{\partial}{\partial \theta} f(\textbf{y}; \theta) \right] f(\textbf{y}; \theta) d\textbf{y} = g'(\theta) \]
+\[= \int T(\textbf{y}) \left[ \frac{\partial \ln f(\textbf{y}; \theta)}{\partial \theta} \right] f(\textbf{y}; \theta) d\textbf{y} = g'(\theta) \]
+The term in brackets is the score function, $\frac{\partial \ln L(\theta)}{\partial \theta}$. The integral is the expected value of the product:
+\[ E\left[ T(\textbf{Y}) \frac{\partial \ln L(\theta)}{\partial \theta} \right] = g'(\theta) \]
+
+Because the expected value of the score function is 0,  when we look at the covariance between $T(\textbf{Y})$ and the score function:
+\[ Cov\left( T(\textbf{Y}), \frac{\partial \ln L(\theta)}{\partial \theta} \right) = E\left[ T(\textbf{Y}) \frac{\partial \ln L(\theta)}{\partial \theta} \right] - E[T(\textbf{Y})]E\left[ \frac{\partial \ln L(\theta)}{\partial \theta} \right] \]
+\[ Cov\left( T(\textbf{Y}), \frac{\partial \ln L(\theta)}{\partial \theta} \right) = g'(\theta) - 0 = g'(\theta) \]
+
+Applying the Cauchy-Schwarz inequality, $[Cov(X,Z)]^2 \le Var(X)Var(Z)$:
+\[ \left[ g'(\theta) \right]^2 \le Var(T(\textbf{Y})) Var\left( \frac{\partial \ln L(\theta)}{\partial \theta} \right) \]
+
+The variance of the score function is equivalent to the Fisher Information, $I(\theta)$:
+\[ \left[ g'(\theta) \right]^2 \le Var(T(\textbf{Y})) I(\theta) \]
+
+From this we find the lower bound for the variance of $T(\textbf{Y})$:
+\[ Var(T(\textbf{Y})) \ge \frac{\left[ g'(\theta) \right]^2}{I(\theta)} \]
 
 \end{enumerate} 
 \end{document}
